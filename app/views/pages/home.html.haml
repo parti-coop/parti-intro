@@ -1,0 +1,57 @@
+!!!
+%html
+  %head
+    %meta{:charset => "utf-8"}
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
+    %title parti.xyz | 유쾌한 정치 플랫폼! 빠띠에서 파티하자!
+
+    = stylesheet_link_tag 'application', media: 'all'
+    %link{href: "https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css", rel: "stylesheet"}
+
+    /[if lt IE 9]
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+    = csrf_meta_tags
+
+  %body
+
+    .site-wrapper
+      .site-wrapper-inner
+        .cover-container
+          .masthead.clearfix
+            .inner
+              %h3.masthead-brand parti.xyz
+              %nav
+                %ul.nav.masthead-nav
+                  %li
+                    %a{:href => "https://www.facebook.com/parti.xyz/"}
+                      %i.fa.fa-facebook
+                  %li
+                    %a{:href => "https://medium.com/parti-xyz-developers"}
+                      %i.fa.fa-medium
+                  %li
+                    %a{:href => "https://github.com/parti-xyz"}
+                      %i.fa.fa-github
+          .inner.cover
+            %h1.cover-heading 유쾌한 정치 플랫폼!
+            %p.lead 빠띠가 곧 여러분을 찾아갑니다.
+            %p.lead
+              .fb-page{"data-adapt-container-width" => "true", "data-hide-cover" => "true", "data-href" => "https://www.facebook.com/parti.xyz/", "data-show-facepile" => "true", "data-small-header" => "true", "data-tabs" => "timeline"}
+                .fb-xfbml-parse-ignore
+                  %blockquote{:cite => "https://www.facebook.com/parti.xyz/"}
+                    %a{:href => "https://www.facebook.com/parti.xyz/"} parti.xyz
+
+
+
+    = javascript_include_tag 'application'
+    #fb-root
+    :javascript
+      (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=384196008452754";
+            fjs.parentNode.insertBefore(js, fjs);
+          }(document, 'script', 'facebook-jssdk'));
