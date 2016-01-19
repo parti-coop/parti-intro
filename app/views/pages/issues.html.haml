@@ -1,0 +1,9 @@
+%section.bs-component
+  .container
+    .jumbotron.jumbotron-transparent(style='margin-top: 20px;')
+      %h2
+        %strong What are you doing now?
+%section.bs-component
+  .container
+    - ['rest515', 'mozodev', 'berry502', 'phi4grv', 'dalikim'].each do |user|
+      %div(data-toggle="github-widget" data-user='#{user}')
