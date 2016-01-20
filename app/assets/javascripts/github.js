@@ -2,6 +2,10 @@
     'use strict';
 
     $.githubWidget = function(element, options) {
+        var defaults = {
+            user: '',
+            widget: 'issues',
+        }
         var plugin = this;
         plugin.settings = {};
 
@@ -33,7 +37,6 @@
                     var title = autoTitle();
 
                     var content = '<ul class="list-group">';
-                    var total = 0;
 
                     $.each(data.items, function(k, v) {
                         var repo_matched = v.url.match(/^https:\/\/api\.github\.com\/repos\/(.+)\/issues\/\d+$/);
@@ -41,8 +44,30 @@
                         content += '<li class="list-group-item">';
                         content += '<div class="text-muted">' + repo + ' #' + v.number +'</div>';
                         content += '<strong><a href="' + v.html_url + '">' + v.title + '</a></strong><br/>' + v.body;
+                    });
 
-                        total++;
+                    content += '</ul>';
+
+                    fillElement(title, content);
+                }
+            });
+        }
+
+        var fetchRepostoriesFromGithub = function() {
+            var user = plugin.settings.user;
+
+            $.ajax({
+                url: 'https://api.github.com/users/parti-xyz/repos?direction=name',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var title = autoTitle();
+
+                    var content = '<ul class="list-group">';
+
+                    $.each(data, function(k, v) {
+                        content += '<li class="list-group-item">';
+                        content += '<strong><a href="' + v.html_url + '/issues" target="_blank">' + v.name + '</a></strong> (' + v.open_issues_count + ')<br/>' + v.description;
                     });
 
                     content += '</ul>';
@@ -53,30 +78,27 @@
         }
 
         plugin.init = function() {
-            plugin.settings = $.extend({}, options);
-            fetchFromGithub();
+            plugin.settings = $.extend({}, defaults, options);
+            if (plugin.settings.widget === 'issue' && plugin.settings.user !== '') {
+                fetchFromGithub();
+            } else if (plugin.settings.widget === 'repos') {
+                fetchRepostoriesFromGithub();
+            }
+
         }
 
         plugin.init();
     }
 
-    // GITHUB WIDGET PLUGIN DEFINITION
-    // ===============================
-
-    $.fn.githubWidget = function(options) {
-        return this.each(function() {
-            var plugin = new $.githubWidget(this, options);
-        });
-    }
-
     $(function() {
         $.each($('[data-toggle="github-widget"]'), function() {
             var inputUser = $(this).data('user');
-            if (inputUser !== undefined) {
-                var options = {};
-                options.user = inputUser;
-                var plugin = new $.githubWidget(this, options);
-            }
+            var inputWidget = $(this).data('widget');
+
+            var options = {};
+            options.user = inputUser;
+            options.widget = (inputWidget !== undefined) ? inputWidget : 'issue';
+            var plugin = new $.githubWidget(this, options);
         });
     });
 
