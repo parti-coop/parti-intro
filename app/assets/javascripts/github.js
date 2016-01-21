@@ -57,7 +57,7 @@
             var user = plugin.settings.user;
 
             $.ajax({
-                url: 'https://api.github.com/users/parti-xyz/repos?direction=name',
+                url: 'https://api.github.com/users/parti-xyz/repos?sort=full_name&direction=asc',
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
@@ -65,9 +65,26 @@
 
                     var content = '<ul class="list-group">';
 
+                    content += '<li class="list-group-item list-group-item-warning">';
+                    content += '<div class="text-muted">Sourcing</div>'
+                    content += '</li>'
                     $.each(data, function(k, v) {
-                        content += '<li class="list-group-item">';
-                        content += '<strong><a href="' + v.html_url + '/issues" target="_blank">' + v.name + '</a></strong> (' + v.open_issues_count + ')<br/>' + v.description;
+                        if(v.fork == false) {
+                            content += '<li class="list-group-item">';
+                            content += '<strong><a href="' + v.html_url + '/issues" target="_blank">' + v.name + '</a></strong> (' + v.open_issues_count + ')<br/>' + v.description;
+                            content += '</li>'
+                        }
+                    });
+
+                    content += '<li class="list-group-item list-group-item-warning">';
+                    content += '<div class="text-muted">Forked</div>'
+                    content += '</li>'
+                    $.each(data, function(k, v) {
+                        if(v.fork == true) {
+                            content += '<li class="list-group-item">';
+                            content += '<strong><a href="' + v.html_url + '/issues" target="_blank">' + v.name + '</a></strong> (' + v.open_issues_count + ')<br/>' + v.description;
+                            content += '</li>'
+                        }
                     });
 
                     content += '</ul>';
