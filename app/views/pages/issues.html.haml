@@ -9,10 +9,19 @@
       .col-md-6
 
         %h3 개인별 이슈
-        - ['rest515', 'mozodev', 'berry502', 'phi4grv', 'dalikim'].each do |user|
-          %div(data-toggle="github-widget" data-user='#{user}')
+        - users = ['rest515', 'mozodev', 'berry502', 'phi4grv', 'dalikim']
+        %ul.nav.nav-tabs(role="tablist")
+          - users.each_with_index do |user, index|
+            %li(class="#{'active' if index == 0}" role="presentation")
+              %a(aria-controls="home" data-toggle="tab" href="##{user}" role="tab") @#{user}
+        .tab-content(style='margin-top: 10px')
+          - users.each_with_index do |user, index|
+            .tab-pane(class="#{'active' if index == 0}"id="#{user}" role="tabpanel")
+              %div(data-toggle="github-widget" data-user='#{user}' data-heading-text='assigned')
+
+              %div(data-toggle="github-widget" data-user='#{user}' data-widget='only-labeled')
       .col-md-6
         %h3 전체 이슈
         .well
           %a(href='https://github.com/issues?q=is%3Aopen+is%3Aissue+user%3Aparti-xyz' target='_blank') 모든 이슈 보기
-        %div(data-toggle="github-widget" data-user='parti-xyz' data-widget='repos')
+        %div(data-toggle="github-widget" data-user='parti-xyz' data-widget='repositories')
