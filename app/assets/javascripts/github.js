@@ -71,7 +71,7 @@
       });
     }
 
-    var fetchOnlyLabeledFromGithub = function() {
+    var fetchUserLabeledFromGithub = function() {
       var user = plugin.settings.user;
 
       $.ajax({
@@ -83,6 +83,19 @@
           var content = issuesContent(data.items.filter(function(v) {
             return (v.assignee && v.assignee.login == user) ? false : true
           }));
+          fillElement(title, content);
+        }
+      });
+    }
+
+    var fetchExperimentLabeledFromGithub = function() {
+      $.ajax({
+        url: 'https://api.github.com/search/issues?q=user:parti-xyz+is:open+label:experiment&sort=pushed',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+          var title = autoTitle();
+          var content = issuesContent(data.items);
           fillElement(title, content);
         }
       });
@@ -134,9 +147,12 @@ plugin.init = function() {
   if (plugin.settings.widget === 'assigned' && plugin.settings.user !== '') {
     plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+assignee%3A" + plugin.settings.user;
     fetchAssignedFromGithub();
-  } else if (plugin.settings.widget === 'only-labeled' && plugin.settings.user !== '') {
+  } else if (plugin.settings.widget === 'user-labeled' && plugin.settings.user !== '') {
     plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3A@" + plugin.settings.user;
-    fetchOnlyLabeledFromGithub();
+    fetchUserLabeledFromGithub();
+  } else if (plugin.settings.widget === 'experiment-labeled') {
+    plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3Aexperiment";
+    fetchExperimentLabeledFromGithub();
   } else if (plugin.settings.widget === 'repositories') {
     plugin.settings.headingLink = "https://github.com/parti-xyz";
     fetchRepostoriesFromGithub();
