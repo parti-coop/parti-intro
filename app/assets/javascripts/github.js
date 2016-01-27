@@ -88,9 +88,9 @@
       });
     }
 
-    var fetchExperimentLabeledFromGithub = function() {
+    var fetchBetterPartiXyzLabeledFromGithub = function() {
       $.ajax({
-        url: 'https://api.github.com/search/issues?q=user:parti-xyz+is:open+label:experiment&sort=pushed',
+        url: 'https://api.github.com/search/issues?q=user:parti-xyz+is:open+label:better-parti-xyz&sort=pushed',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -150,9 +150,9 @@ plugin.init = function() {
   } else if (plugin.settings.widget === 'user-labeled' && plugin.settings.user !== '') {
     plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3A@" + plugin.settings.user;
     fetchUserLabeledFromGithub();
-  } else if (plugin.settings.widget === 'experiment-labeled') {
-    plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3Aexperiment";
-    fetchExperimentLabeledFromGithub();
+  } else if (plugin.settings.widget === 'better-parti-xyz-labeled') {
+    plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3Abetter-parti-xyz";
+    fetchBetterPartiXyzLabeledFromGithub();
   } else if (plugin.settings.widget === 'repositories') {
     plugin.settings.headingLink = "https://github.com/parti-xyz";
     fetchRepostoriesFromGithub();
