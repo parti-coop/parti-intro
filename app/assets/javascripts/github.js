@@ -20,10 +20,9 @@
       $element.html(panel);
     };
 
-    var autoTitle = function(footer) {
-      var headingText = plugin.settings.widget.charAt(0).toUpperCase() + plugin.settings.widget.slice(1);
-      return '<a href="' + plugin.settings.headingLink + '" target="_blank">'
-      + headingText +
+    var autoTitle = function() {
+      return '<a href=\'' + plugin.settings.headingLink + '\' target="_blank">'
+      + plugin.settings.title +
       '</a>';
     };
 
@@ -88,9 +87,11 @@
       });
     }
 
-    var fetchBetterPartiXyzLabeledFromGithub = function() {
+    var fetchLabeledFromGithub = function() {
+      var label = plugin.settings.label;
+
       $.ajax({
-        url: 'https://api.github.com/search/issues?q=user:parti-xyz+is:open+label:better-parti-xyz&sort=pushed',
+        url: 'https://api.github.com/search/issues?q=user:parti-xyz+is:open+label:' + label + '&sort=pushed',
         type: 'GET',
         dataType: 'json',
         success: function(data) {
@@ -150,9 +151,9 @@ plugin.init = function() {
   } else if (plugin.settings.widget === 'user-labeled' && plugin.settings.user !== '') {
     plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3A@" + plugin.settings.user;
     fetchUserLabeledFromGithub();
-  } else if (plugin.settings.widget === 'better-parti-xyz-labeled') {
-    plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3Abetter-parti-xyz";
-    fetchBetterPartiXyzLabeledFromGithub();
+  } else if (plugin.settings.widget === 'labeled') {
+    plugin.settings.headingLink = "https://github.com/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+user%3Aparti-xyz+label%3A" + plugin.settings.label;
+    fetchLabeledFromGithub();
   } else if (plugin.settings.widget === 'repositories') {
     plugin.settings.headingLink = "https://github.com/parti-xyz";
     fetchRepostoriesFromGithub();
@@ -166,11 +167,15 @@ plugin.init();
 $(function() {
   $.each($('[data-toggle="github-widget"]'), function() {
     var inputUser = $(this).data('user');
+    var inputLabel = $(this).data('label');
     var inputWidget = $(this).data('widget');
+    var inputTitle = $(this).data('title');
 
     var options = {};
     options.user = inputUser;
+    options.label = (inputLabel !== undefined) ? inputLabel : '';
     options.widget = (inputWidget !== undefined) ? inputWidget : 'assigned';
+    options.title = (inputTitle !== undefined) ? inputTitle : 'show in github...';
     var plugin = new $.githubWidget(this, options);
   });
 });
